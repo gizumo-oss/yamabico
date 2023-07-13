@@ -32,7 +32,6 @@ endif
 	@fvm flutter doctor
 	@fvm flutter doctor --android-licenses
 	@cd src && fvm flutter pub get
-	@open -a Simulator
 	@make devices
 	@echo ''
 	@make dev-ios
@@ -51,6 +50,7 @@ clean:
 
 .PHONY: dev-ios
 dev-ios:
+	@open -a Simulator
 	@cd src && fvm flutter run -d iPhone
 
 .PHONY: dev-android
