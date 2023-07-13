@@ -5,20 +5,40 @@
 # setup
 .PHONY: setup
 setup:
-  # Apple Silicon Macの場合はRosettaが必要のため、下記コメントイン
-  # sudo softwareupdate --install-rosetta --agree-to-license
+ifeq ($(shell uname), Darwin)
+ifeq ($(shell uname -m), arm64)
+	@sudo softwareupdate --install-rosetta --agree-to-license
+endif
+else
+	$(error [ERROR] 現在MacOS以外は対応していません。)
+endif
 
-  brew tap leoafarias/fvm
-  brew install fvm
-  brew install cocoapods
-  brew link --overwrite cocoapods
-  
-  echo 'export PATH="$$PATH:$$HOME/.pub-cache/bin"' >> ~/.zshrc
-  echo 'export PATH="$$HOME/fvm/default/bin:$$PATH"' >> ~/.zshrc
-  source ~/.zshrc
+	@result_fvm=$(shell fvm --version &> /dev/null && echo $$?); \
+	if [ "$$result_fvm" != 0 ]; then \
+		brew tap leoafarias/fvm; \
+		brew install fvm; \
+	fi;
 
-  fvm use stable --force
-  fvm global stable
-  fvm flutter create .
-  fvm flutter doctor
-  fvm flutter doctor --android-licenses
+	@result_cocoapods=$(shell pod --version &> /dev/null && echo $$?); \
+	if [ "$$result_cocoapods" != 0 ]; then \
+		brew install cocoapods; \
+		brew link --overwrite cocoapods; \
+	fi;
+
+	@echo 'export PATH="$$PATH:$$HOME/.pub-cache/bin"' >> $(ZDOTDIR)/.zshrc
+	@echo 'export PATH="$$HOME/fvm/default/bin:$$PATH"' >> $(ZDOTDIR)/.zshrc
+	$(shell source ${ZDOTDIR}/.zshrc)
+
+	@fvm use stable --force
+	@fvm flutter doctor
+	@fvm flutter doctor --android-licenses
+	@echo ''
+	@echo '---------- 起動可能なデバイス ----------'
+	@fvm flutter devices
+	@echo '----------------------------------------'
+	@echo ''
+	@echo 'セットアップ完了'
+	@echo '以下のコマンドを実行してアプリを起動してください'
+	@echo '-----------------------------------------------------------------'
+	@echo 'cd src && fvm flutter run --device-id {起動したいデバイスのID}'
+	@echo '-----------------------------------------------------------------'
