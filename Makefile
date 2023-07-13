@@ -2,7 +2,6 @@
 ## ローカルで環境開発する際のコマンド
 ################################################################################################
 
-# setup
 .PHONY: setup
 setup:
 ifeq ($(shell uname), Darwin)
@@ -32,13 +31,28 @@ endif
 	@fvm use stable --force
 	@fvm flutter doctor
 	@fvm flutter doctor --android-licenses
+	@cd src && fvm flutter pub get
+	@open -a Simulator
+	@make devices
+	@echo ''
+	@make dev-ios
+
+.PHONY: devices
+devices:
 	@echo ''
 	@echo '---------- 起動可能なデバイス ----------'
 	@fvm flutter devices
+	@echo ※iOS,Androidが表示されない場合は事前にシミュレーターを起動する必要があります
 	@echo '----------------------------------------'
-	@echo ''
-	@echo 'セットアップ完了'
-	@echo '以下のコマンドを実行してアプリを起動してください'
-	@echo '-----------------------------------------------------------------'
-	@echo 'cd src && fvm flutter run --device-id {起動したいデバイスのID}'
-	@echo '-----------------------------------------------------------------'
+
+.PHONY: clean
+clean:
+	@fvm flutter clean
+
+.PHONY: dev-ios
+dev-ios:
+	@cd src && fvm flutter run -d iPhone
+
+.PHONY: dev-android
+dev-android:
+	@echo 'WIP'
