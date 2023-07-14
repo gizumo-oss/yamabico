@@ -28,9 +28,9 @@ class _MyAppState extends State<MyApp> {
     try {
       await Amplify.addPlugin(AmplifyAuthCognito());
       await Amplify.configure(amplifyconfig);
-      print('Successfully configured');
+      safePrint('Successfully configured');
     } on Exception catch (e) {
-      print('Error configuring Amplify: $e');
+      safePrint('Error configuring Amplify: $e');
     }
   }
 
