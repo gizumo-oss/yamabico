@@ -24,10 +24,6 @@ endif
 		brew link --overwrite cocoapods; \
 	fi;
 
-	@echo 'export PATH="$$PATH:$$HOME/.pub-cache/bin"' >> $(ZDOTDIR)/.zshrc
-	@echo 'export PATH="$$HOME/fvm/default/bin:$$PATH"' >> $(ZDOTDIR)/.zshrc
-	$(shell source ${ZDOTDIR}/.zshrc)
-
 	@fvm use stable --force
 	@fvm flutter doctor
 	@fvm flutter doctor --android-licenses
