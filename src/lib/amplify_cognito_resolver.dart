@@ -25,6 +25,11 @@ class CustomButtonResolver extends ButtonResolver {
   }
 
   @override
+  String submit(BuildContext context) {
+    return '送信';
+  }
+
+  @override
   String sendCode(BuildContext context) {
     return '再送信';
   }
@@ -77,6 +82,12 @@ class CustomInputResolver extends InputResolver {
     final fieldName = title(context, field);
     final replaceFieldName = fieldName.replaceFirst('(確認)', '');
     return '$replaceFieldNameを再度入力してください';
+  }
+
+  @override
+  String empty(BuildContext context, InputField field) {
+    final fieldName = title(context, field);
+    return '$fieldNameを入力してください';
   }
 }
 
