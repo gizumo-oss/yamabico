@@ -4,8 +4,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 
-import 'amplifyconfiguration.dart';
-import 'amplify_cognito_resolver.dart';
+import 'feature/auth/infra/amplifyconfiguration.dart';
+import 'feature/auth/presentation/amplify_cognito_resolver.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
