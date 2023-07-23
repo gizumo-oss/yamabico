@@ -59,7 +59,7 @@ final class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16.0, 150.0, 16.0, 150.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
