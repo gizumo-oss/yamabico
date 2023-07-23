@@ -15,21 +15,30 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 100.0),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/login',
-              );
-            },
-            label: const Text('Start'),
-            icon: const Icon(Icons.arrow_forward_ios),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
-              backgroundColor: Colors.deepOrange,
-              textStyle: const TextStyle(fontSize: 20.0),
-            ),
+          padding: const EdgeInsets.fromLTRB(0, 150.0, 0, 100.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Yamabico',
+                style: TextStyle(fontSize: 35.0, color: Colors.white),
+              ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/login',
+                  );
+                },
+                label: const Text('Start'),
+                icon: const Icon(Icons.arrow_forward_ios),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
+                  backgroundColor: Colors.deepOrange,
+                  textStyle: const TextStyle(fontSize: 20.0),
+                ),
+              ),
+            ],
           ),
         ),
       ),
