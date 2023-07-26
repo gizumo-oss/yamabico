@@ -1,11 +1,13 @@
 ################################################################################################
 ## ローカルで環境開発する際のコマンド
 ################################################################################################
-help:
-	@grep "^[a-zA-Z\-]*:" Makefile | grep -v "grep" | sed -e 's/^/make /' | sed -e 's/://'
+.DEFAULT_GOAL := help
 
-.PHONY: setup
-setup:
+help: ## makeコマンドのサブコマンドリストと、各コマンドの説明を表示します
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.PHONY := setup
+setup: ## 環境の構築を行います
 ifeq ($(shell uname), Darwin)
 ifeq ($(shell uname -m), arm64)
 	@sudo softwareupdate --install-rosetta --agree-to-license
@@ -38,23 +40,23 @@ endif
 	@echo ''
 	@make dev-ios
 
-.PHONY: devices
-devices:
+.PHONY := devices
+devices: ## 起動可能なデバイスを表示します
 	@echo ''
 	@echo '---------- 起動可能なデバイス ----------'
 	@fvm flutter devices
 	@echo ※iOS,Androidが表示されない場合は事前にシミュレーターを起動する必要があります
 	@echo '----------------------------------------'
 
-.PHONY: clean
-clean:
+.PHONY := clean
+clean: ## パッケージの削除を行います
 	@fvm flutter clean
 
 .PHONY: dev-ios
-dev-ios:
+dev-ios: ## iOSシミュレーターでプロジェクトを起動します
 	@open -a Simulator
 	@cd src && fvm flutter run -d iPhone
 
-.PHONY: dev-android
-dev-android:
+.PHONY := dev-android
+dev-android: ## WIP:Androidエミュレーターでプロジェクトを起動します
 	@echo 'WIP'
