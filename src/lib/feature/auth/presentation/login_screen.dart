@@ -1,6 +1,7 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:yamabico/feature/auth/presentation/amplify_cognito_resolver.dart';
+import 'package:yamabico/feature/posts/presentation/index_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -32,12 +33,7 @@ class LoginScreen extends StatelessWidget {
       },
       child: MaterialApp(
         builder: Authenticator.builder(),
-        home: Scaffold(
-          appBar: AppBar(title: const Text('ホーム')),
-          body: const Center(
-            child: Text('ログイン成功！', style: TextStyle(fontSize: 32.0)),
-          ),
-        ),
+        home: const IndexScreen(),
       ),
     );
   }
