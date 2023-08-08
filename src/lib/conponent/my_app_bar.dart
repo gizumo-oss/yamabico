@@ -60,6 +60,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _CustomIconButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  // TODO:`main.dart`の`routes`のキーのユニオン型に限定したい
   final String moveTo;
 
   const _CustomIconButton({required this.icon, required this.label, required this.moveTo});
