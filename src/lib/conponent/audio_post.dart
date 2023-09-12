@@ -73,6 +73,7 @@ class Avatar extends StatelessWidget {
         width: 70,
         height: 60,
         child: CircleAvatar(
+          // TODO: プロフィール画像へ
           backgroundImage: NetworkImage('https://loremflickr.com/320/240'),
         ),
       ),
