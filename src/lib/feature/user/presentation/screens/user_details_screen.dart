@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yamabico/feature/user/data/user_profile.dart';
+import 'package:yamabico/feature/user/presentation/components/play_list.dart';
 import 'package:yamabico/feature/user/presentation/components/profile.dart';
 
 class UserDetailsScreen extends StatefulWidget {
@@ -41,9 +42,11 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             itemExtent: 100.0,
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return ListTile(
-                  title: Text('音声タイトル $index'),
-                  subtitle: Text('詳細 $index'),
+                return PlayList(
+                  title: '音楽タイトル $index',
+                  playTime: '15:40',
+                  playCount: '1,000回',
+                  postDate: '10/12',
                 );
               },
               childCount: 100,
