@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yamabico/route_type.dart';
 
 class GuestTopScreen extends StatelessWidget {
   const GuestTopScreen({super.key});
@@ -27,7 +28,7 @@ class GuestTopScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    '/login',
+                    RouteType.login().value(),
                   );
                 },
                 label: const Text('Start'),

@@ -1,6 +1,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:yamabico/route_type.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({super.key});
@@ -13,7 +14,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Center(
         child: TextButton.icon(
           onPressed: () {
-            Navigator.pushNamed(context, '/posts');
+            Navigator.pushNamed(context, RouteType.guestTop().value());
           },
           icon: SvgPicture.asset(
             'assets/image/gizumo-logo.svg',
@@ -28,26 +29,26 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      actions: const <Widget>[
+      actions: <Widget>[
         _CustomIconButton(
           icon: Icons.info_outline,
           label: '注目',
-          moveTo: '/',
+          moveTo: RouteType.guestTop(),
         ),
         _CustomIconButton(
           icon: Icons.manage_search_outlined,
           label: '探す',
-          moveTo: '/',
+          moveTo: RouteType.guestTop(),
         ),
         _CustomIconButton(
           icon: Icons.library_music_outlined,
           label: 'ライブラリ',
-          moveTo: '/',
+          moveTo: RouteType.guestTop(),
         ),
         _CustomIconButton(
           icon: Icons.account_box_outlined,
           label: 'マイページ',
-          moveTo: '/',
+          moveTo: RouteType.guestTop(),
         ),
       ],
     );
@@ -60,8 +61,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _CustomIconButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  // TODO:`main.dart`の`routes`のキーのユニオン型に限定したい
-  final String moveTo;
+  final RouteType moveTo;
 
   const _CustomIconButton({required this.icon, required this.label, required this.moveTo});
 
@@ -85,7 +85,7 @@ class _CustomIconButton extends StatelessWidget {
       iconSize: 45.0,
       onPressed: () {
         safePrint('$label is clicked');
-        Navigator.pushNamed(context, moveTo);
+        Navigator.pushNamed(context, moveTo.value());
       },
     );
   }
