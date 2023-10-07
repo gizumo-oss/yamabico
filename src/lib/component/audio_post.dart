@@ -23,7 +23,7 @@ class AudioPost extends StatelessWidget {
             icon: itemState.isPlaying(index) ? const Icon(Icons.pause_circle_filled) : const Icon(Icons.play_circle_filled),
             color: const Color.fromRGBO(124, 122, 122, 1.0),
             iconSize: 40,
-            onPressed: () => itemState.updatePressed(index)
+            onPressed: () => itemState.onPressedPlayButton(index)
           )
         ],
       )
@@ -38,7 +38,7 @@ class ItemState extends ChangeNotifier {
     return _playedMap[index] ?? false;
   }
 
-  void updatePressed(int index) {
+  void onPressedPlayButton(int index) {
     _playedMap[index] = !isPlaying(index);
     _playedMap.forEach((key, value) {
       if(key != index) {
