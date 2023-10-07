@@ -3,39 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AudioPost extends StatelessWidget {
-  const AudioPost({super.key});
+  final int index;
+
+  const AudioPost({
+    super.key,
+    required this.index
+  });
 
   @override
   Widget build(BuildContext context) {
-    final items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-    return ListView.separated(
-      itemCount: items.length + 1,
-      separatorBuilder: (context, index) {
-        return const Divider();
-      },
-      itemBuilder: (context, index) {
-        final itemState = Provider.of<ItemState>(context);
-
-        if (index < items.length) {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                const Avatar(),
-                const Content(),
-                IconButton(
-                  icon: itemState.isPlaying(index) ? const Icon(Icons.pause_circle_filled) : const Icon(Icons.play_circle_filled),
-                  color: const Color.fromRGBO(124, 122, 122, 1.0),
-                  iconSize: 40,
-                  onPressed: () => itemState.updatePressed(index)
-                )
-              ],
-            )
-          );
-        }
-        return const SizedBox(height: 100.0); // 最後の要素に到達した際にMyMusisPlayerの高さ分要素を追加
-      },
+    final itemState = Provider.of<ItemState>(context);
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          const Avatar(),
+          const Content(),
+          IconButton(
+            icon: itemState.isPlaying(index) ? const Icon(Icons.pause_circle_filled) : const Icon(Icons.play_circle_filled),
+            color: const Color.fromRGBO(124, 122, 122, 1.0),
+            iconSize: 40,
+            onPressed: () => itemState.updatePressed(index)
+          )
+        ],
+      )
     );
   }
 }
