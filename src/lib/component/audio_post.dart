@@ -39,17 +39,15 @@ class ItemState extends ChangeNotifier {
   }
 
   void onPressedPlayButton(int index) {
-    _playedMap[index] = !isPlaying(index);
     _playedMap.forEach((key, value) {
-      if(key != index) {
-        _playedMap[key] = false;
-      }
+      _playedMap[key] = false;
     });
+    _playedMap[index] = !isPlaying(index);
+
     safePrint("$index番目の音声再生中");
     notifyListeners();
   }
 }
-
 
 // 投稿者アバター
 class Avatar extends StatelessWidget {
