@@ -33,9 +33,8 @@ class AudioPost extends StatelessWidget {
               ],
             )
           );
-        } else {
-            return const SizedBox(height: 100.0); // 最後の要素に到達した際にMyMusisPlayerの高さ分要素を追加
         }
+        return const SizedBox(height: 100.0); // 最後の要素に到達した際にMyMusisPlayerの高さ分要素を追加
       },
     );
   }
