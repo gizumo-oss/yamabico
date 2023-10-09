@@ -17,7 +17,7 @@ class AudioPost extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          const Avatar(),
+          const Avatar(url: 'https://loremflickr.com/320/240'),
           const Content(),
           IconButton(
             icon: itemState.isPlaying(index) ? const Icon(Icons.pause_circle_filled) : const Icon(Icons.play_circle_filled),
@@ -51,18 +51,22 @@ class ItemState extends ChangeNotifier {
 
 // 投稿者アバター
 class Avatar extends StatelessWidget {
-  const Avatar({super.key});
+
+  final String? url;
+  const Avatar({
+    super.key,
+    this.url,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(right: 13.0),
-      child: const SizedBox(
+      child: SizedBox(
         width: 70,
         height: 60,
         child: CircleAvatar(
-          // TODO: プロフィール画像へ
-          backgroundImage: NetworkImage('https://loremflickr.com/320/240'),
+          backgroundImage: NetworkImage(url!),
         ),
       ),
     );
