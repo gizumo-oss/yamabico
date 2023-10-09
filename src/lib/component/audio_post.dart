@@ -248,7 +248,7 @@ class TotalPlay extends StatelessWidget {
   }
 }
 
-// アイコン＋投稿日時
+// 投稿日時
 class PostDate extends StatelessWidget {
   final String date;
   const PostDate({
