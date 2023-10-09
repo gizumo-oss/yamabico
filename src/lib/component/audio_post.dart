@@ -18,7 +18,13 @@ class AudioPost extends StatelessWidget {
       child: Row(
         children: [
           const Avatar(url: 'https://loremflickr.com/320/240'),
-          const Content(),
+          const Content(
+            title: '音声タイトル音声タイトル音音声タイトル',
+            name : 'Contributor',
+            time: '15:29',
+            count: '56',
+            date: '06/16'
+          ),
           IconButton(
             icon: itemState.isPlaying(index) ? const Icon(Icons.pause_circle_filled) : const Icon(Icons.play_circle_filled),
             color: const Color.fromRGBO(124, 122, 122, 1.0),
@@ -75,7 +81,19 @@ class Avatar extends StatelessWidget {
 
 // 投稿内容
 class Content extends StatelessWidget {
-  const Content({super.key});
+  final String title;
+  final String name;
+  final String time;
+  final String count;
+  final String date;
+  const Content({
+    super.key,
+    required this.title,
+    required this.name,
+    required this.time,
+    required this.count,
+    required this.date
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,36 +102,36 @@ class Content extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 5.0),
-            child: const Text('音声タイトル音声タイトル音音声タイトル'),
+            child: Text(title),
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 5.0),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Flexible(
                   flex: 3,
-                  child: Contributor()
+                  child: Contributor(name: name)
                 ),
                 Flexible(
                   flex: 2,
                   child: SizedBox(
                     width: 65,
-                    child: PlayTime(),
+                    child: PlayTime(time: time),
                   )
                 )
               ],
             ),
           ),
-          const Row(
+          Row(
             children: [
               Expanded(
                 flex: 3,
-                child: TotalPlay()
+                child: TotalPlay(count: count)
               ),
               Expanded(
                 flex: 2,
-                child: PostDate()
+                child: PostDate(date: date)
               ),
             ],
           ),
@@ -125,14 +143,19 @@ class Content extends StatelessWidget {
 
 // アイコン＋投稿者名
 class Contributor extends StatelessWidget {
-  const Contributor({super.key});
+  final String name;
+
+  const Contributor({
+    super.key,
+    required this.name
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(right: 3.0),
           child: Icon(
             Icons.record_voice_over,
@@ -141,9 +164,9 @@ class Contributor extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            'Contributor',
+            name,
             softWrap: true,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15
             ),
             overflow: TextOverflow.ellipsis,
@@ -156,7 +179,12 @@ class Contributor extends StatelessWidget {
 
 // アイコン＋再生時間
 class PlayTime extends StatelessWidget {
-  const PlayTime({super.key});
+  final String time;
+
+  const PlayTime({
+    super.key,
+    required this.time
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -175,9 +203,9 @@ class PlayTime extends StatelessWidget {
               size: 15,
             ),
           ),
-          const Text(
-            '15:29',
-            style: TextStyle(
+          Text(
+            time,
+            style: const TextStyle(
               fontSize: 15,
             ),
           ),
@@ -189,7 +217,11 @@ class PlayTime extends StatelessWidget {
 
 // アイコン＋総再生回数
 class TotalPlay extends StatelessWidget {
-  const TotalPlay({super.key});
+  final String count;
+  const TotalPlay({
+    super.key,
+    required this.count
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -202,11 +234,11 @@ class TotalPlay extends StatelessWidget {
             size: 15
           ),
         ),
-        const Expanded(
+        Expanded(
           child: Text(
-            '56',
+            count,
             softWrap: true,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15
             )
           ),
@@ -218,7 +250,11 @@ class TotalPlay extends StatelessWidget {
 
 // アイコン＋投稿日時
 class PostDate extends StatelessWidget {
-  const PostDate({super.key});
+  final String date;
+  const PostDate({
+    super.key,
+    required this.date
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -226,9 +262,9 @@ class PostDate extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.only(right: 3.0),
-          child: const Text(
-            '06/16',
-            style: TextStyle(
+          child: Text(
+            date,
+            style: const TextStyle(
               fontSize: 15
             ),
           ),
