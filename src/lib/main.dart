@@ -2,9 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
-import 'package:yamabico/feature/auth/presentation/login_screen.dart';
-import 'package:yamabico/guest_top_screen.dart';
-import 'package:yamabico/feature/posts/presentation/index_screen.dart';
+import 'package:yamabico/route_type.dart';
 
 import 'feature/auth/infra/amplifyconfiguration.dart';
 
@@ -52,12 +50,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: _isAuth ? '/posts' : '/',
-      routes: {
-        '/': (context) => const GuestTopScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/posts': (context) => const IndexScreen(),
-      },
+      initialRoute: _isAuth ? RouteType.posts().value() : RouteType.guestTop().value(),
+      routes: RouteType.routeScreenMaps(),
     );
   }
 }
