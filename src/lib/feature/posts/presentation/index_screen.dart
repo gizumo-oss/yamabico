@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yamabico/component/audio_post.dart';
+import 'package:yamabico/component/my_app_bar.dart';
 import 'package:yamabico/component/my_music_player.dart';
 
 class IndexScreen extends StatelessWidget {
@@ -25,7 +26,7 @@ class IndexScreen extends StatelessWidget {
     return ChangeNotifierProvider<ItemState>(
       create: (_) => ItemState(),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: const MyAppBar(),
         body: Stack(
           children: [
             Scrollbar(
