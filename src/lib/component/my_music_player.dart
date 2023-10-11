@@ -12,7 +12,9 @@ class MyMusicPlayer extends StatelessWidget {
         vertical: 10.0,
       ),
       height: 140.0,
-      decoration: const BoxDecoration(color: Color(0xFF13366B)),
+      decoration: BoxDecoration(
+        color: const Color(0xFF13366B).withOpacity(0.9),
+      ),
       child: Column(
         children: [
           Center(
