@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:yamabico/component/audio_post.dart';
 import 'package:yamabico/component/my_app_bar.dart';
 import 'package:yamabico/component/my_music_player.dart';
+import 'package:yamabico/feature/user/presentation/user_detail_screen.dart'; // UserDetailScreenを利用するため
 
 class IndexScreen extends StatelessWidget {
   const IndexScreen({super.key});
@@ -52,6 +53,36 @@ class IndexScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class AudioPost extends StatelessWidget {
+  final int index;
+  final AudioData audioData;
+
+  AudioPost({required this.index, required this.audioData});
+
+  void _navigateToUserDetail(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserDetailScreen(
+          user: audioData.user,
+          userPosts: [audioData], // ユーザーの投稿一覧
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: GestureDetector(
+        onTap: () => _navigateToUserDetail(context),
+        child: Image.network(audioData.user.avatarUrl),
+      ),
+      title: Text(audioData.title),
     );
   }
 }
