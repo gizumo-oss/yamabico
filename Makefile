@@ -28,6 +28,8 @@ endif
 		brew link --overwrite cocoapods; \
 	fi;
 
+	@make git-setup
+	@echo 'git setup finished'
 	@fvm use stable --force
 	@fvm flutter doctor
 	@fvm flutter doctor --android-licenses
@@ -56,3 +58,23 @@ dev-ios: ## iOSシミュレーターでプロジェクトを起動します
 .PHONY := dev-android
 dev-android: ## WIP:Androidエミュレーターでプロジェクトを起動します
 	@echo 'WIP'
+
+.PHONY: git-setup
+git-setup: ## gitの設定を行います
+	$(shell ./.make/setup_git.sh)
+
+.PHONY: dev-analyze
+dev-analyze: ## プロジェクトの静的解析を行います
+	@cd src && fvm flutter analyze
+
+.PHONY: dev-format
+dev-format: ## プロジェクトのフォーマットを行います
+	@cd src && dart format .
+
+.PHONY: dev-fix-dryrun
+dev-fix-dryrun: ## dev-analyzeによって特定された問題、非推奨のAPIや機能の使用に関連する問題の自動修正を提案します
+	@cd src && dart fix --dry-run
+
+.PHONY: dev-fix
+dev-fix: ## dev-fix-dryrunの静的解析修正の提案を適応します
+	@cd src && dart fix --apply
