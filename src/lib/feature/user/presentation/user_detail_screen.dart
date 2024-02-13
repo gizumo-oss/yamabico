@@ -13,11 +13,20 @@ class UserDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(user.name), // ユーザー名を表示
       ),
-      body: ListView(
-        children: userPosts.map((post) => ListTile(
-          leading: Image.network(user.avatarUrl), // ユーザーのプロフィール画像を表示
-          title: Text(post.title), // 投稿のタイトルを表示
-        )).toList(),
+      body: Column(
+        children: [
+          Text(user.avatarUrl),
+          Text(user.name),
+          Expanded(
+            child:
+              ListView(
+                children: userPosts.map((post) => ListTile(
+                leading: Image.network(user.avatarUrl), // ユーザーのプロフィール画像を表示
+                title: Text(post.title), // 投稿のタイトルを表示
+              )).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
