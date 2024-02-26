@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yamabico/feature/posts/presentation/index_screen.dart';
+import 'package:yamabico/feature/user/presentation/user_detail_screen.dart';
 
 class AudioPost extends StatelessWidget {
   final int index;
@@ -9,14 +10,32 @@ class AudioPost extends StatelessWidget {
 
   const AudioPost({super.key, required this.index, required this.audioData});
 
+  // TODO: userDetailへの遷移はルーティングを通して遷移させる
+  void _navigateToUserDetail(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserDetailScreen(
+          user: audioData.user,
+          userPosts: [audioData], // ユーザーの投稿一覧
+        ),
+      ),
+    );
+    // Navigator.of(context).pushNamed("/userDetail");
+  }
+
   @override
   Widget build(BuildContext context) {
     final itemState = Provider.of<ItemState>(context);
+
     return Container(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Avatar(url: audioData.user.avatarUrl),
+            GestureDetector(
+                onTap: () => _navigateToUserDetail(context),
+                child: Avatar(
+                    url: audioData.user.avatarUrl, width: 70, height: 60)),
             Content(
                 title: audioData.title,
                 name: audioData.user.name,
@@ -57,9 +76,14 @@ class ItemState extends ChangeNotifier {
 // 投稿者アバター
 class Avatar extends StatelessWidget {
   final String? url;
+  final double width;
+  final double height;
+
   const Avatar({
     super.key,
     this.url,
+    required this.width,
+    required this.height,
   });
 
   @override
@@ -67,8 +91,8 @@ class Avatar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(right: 13.0),
       child: SizedBox(
-        width: 70,
-        height: 60,
+        width: width,
+        height: height,
         child: CircleAvatar(
           backgroundImage: NetworkImage(url!),
         ),
@@ -99,6 +123,7 @@ class Content extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 5.0),
+            alignment: Alignment.centerLeft,
             child: Text(title),
           ),
           Container(
