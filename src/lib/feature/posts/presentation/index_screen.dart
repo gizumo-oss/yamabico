@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:yamabico/component/audio_post.dart';
 import 'package:yamabico/component/my_app_bar.dart';
 import 'package:yamabico/component/my_music_player.dart';
+import 'package:yamabico/feature/user/presentation/user_detail_screen.dart';
 
 class IndexScreen extends StatelessWidget {
   const IndexScreen({super.key});
@@ -12,7 +13,7 @@ class IndexScreen extends StatelessWidget {
     List<AudioData> audioPost = [
       AudioData(
           '音声タイトル音声タイトル音音声タイトル',
-          User('Contributor', 'https://loremflickr.com/320/240'),
+          User('テストテストテストユーザ名', 'https://loremflickr.com/320/240'),
           '56',
           '15:29',
           '06/16'),
@@ -23,6 +24,7 @@ class IndexScreen extends StatelessWidget {
           '15:29',
           '06/16'),
     ];
+
     return ChangeNotifierProvider<ItemState>(
       create: (_) => ItemState(),
       child: Scaffold(
@@ -76,14 +78,4 @@ class AudioData {
   String get count => _count;
   String get playTime => _playTime;
   String get date => _date;
-}
-
-class User {
-  final String _name;
-  final String _avatarUrl;
-
-  User(this._name, this._avatarUrl);
-
-  String get name => _name;
-  String get avatarUrl => _avatarUrl;
 }
