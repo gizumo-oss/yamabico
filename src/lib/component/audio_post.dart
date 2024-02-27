@@ -6,9 +6,14 @@ import 'package:yamabico/feature/user/presentation/user_detail_screen.dart';
 
 class AudioPost extends StatelessWidget {
   final int index;
+  final bool isVisibleAvatar;
   final AudioData audioData;
 
-  const AudioPost({super.key, required this.index, required this.audioData});
+  const AudioPost(
+      {super.key,
+      required this.index,
+      this.isVisibleAvatar = true,
+      required this.audioData});
 
   // TODO: userDetailへの遷移はルーティングを通して遷移させる
   void _navigateToUserDetail(BuildContext context) {
@@ -17,11 +22,10 @@ class AudioPost extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => UserDetailScreen(
           user: audioData.user,
-          userPosts: [audioData], // ユーザーの投稿一覧
+          userPosts: [audioData],
         ),
       ),
     );
-    // Navigator.of(context).pushNamed("/userDetail");
   }
 
   @override
@@ -32,10 +36,19 @@ class AudioPost extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            GestureDetector(
-                onTap: () => _navigateToUserDetail(context),
-                child: Avatar(
-                    url: audioData.user.avatarUrl, width: 70, height: 60)),
+            isVisibleAvatar
+                ? GestureDetector(
+                    onTap: () => _navigateToUserDetail(context),
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: 13.0),
+                        child: Avatar(
+                            url: audioData.user.avatarUrl,
+                            width: 70,
+                            height: 60)))
+                : const SizedBox(
+                    width: 0,
+                    height: 0,
+                  ),
             Content(
                 title: audioData.title,
                 name: audioData.user.name,
@@ -88,14 +101,11 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 13.0),
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: CircleAvatar(
-          backgroundImage: NetworkImage(url!),
-        ),
+    return SizedBox(
+      width: width,
+      height: height,
+      child: CircleAvatar(
+        backgroundImage: NetworkImage(url!),
       ),
     );
   }
