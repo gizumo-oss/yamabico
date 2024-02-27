@@ -9,11 +9,12 @@ class AudioPost extends StatelessWidget {
   final bool isVisibleAvatar;
   final AudioData audioData;
 
-  const AudioPost(
-      {super.key,
-      required this.index,
-      this.isVisibleAvatar = true,
-      required this.audioData});
+  const AudioPost({
+    super.key,
+    required this.index,
+    this.isVisibleAvatar = true,
+    required this.audioData,
+  });
 
   // TODO: userDetailへの遷移はルーティングを通して遷移させる
   void _navigateToUserDetail(BuildContext context) {
@@ -33,37 +34,43 @@ class AudioPost extends StatelessWidget {
     final itemState = Provider.of<ItemState>(context);
 
     return Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            isVisibleAvatar
-                ? GestureDetector(
-                    onTap: () => _navigateToUserDetail(context),
-                    child: Padding(
-                        padding: const EdgeInsets.only(right: 13.0),
-                        child: Avatar(
-                            url: audioData.user.avatarUrl,
-                            width: 70,
-                            height: 60)))
-                : const SizedBox(
-                    width: 0,
-                    height: 0,
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          isVisibleAvatar
+              ? GestureDetector(
+                  onTap: () => _navigateToUserDetail(context),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 13.0),
+                    child: Avatar(
+                      url: audioData.user.avatarUrl,
+                      width: 70,
+                      height: 60,
+                    ),
                   ),
-            Content(
-                title: audioData.title,
-                name: audioData.user.name,
-                time: audioData.playTime,
-                count: audioData.count,
-                date: audioData.date),
-            IconButton(
-                icon: itemState.isPlaying(index)
-                    ? const Icon(Icons.pause_circle_filled)
-                    : const Icon(Icons.play_circle_filled),
-                color: const Color.fromRGBO(124, 122, 122, 1.0),
-                iconSize: 40,
-                onPressed: () => itemState.onPressedPlayButton(index))
-          ],
-        ));
+                )
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+          Content(
+            title: audioData.title,
+            name: audioData.user.name,
+            time: audioData.playTime,
+            count: audioData.count,
+            date: audioData.date,
+          ),
+          IconButton(
+            icon: itemState.isPlaying(index)
+                ? const Icon(Icons.pause_circle_filled)
+                : const Icon(Icons.play_circle_filled),
+            color: const Color.fromRGBO(124, 122, 122, 1.0),
+            iconSize: 40,
+            onPressed: () => itemState.onPressedPlayButton(index),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -81,7 +88,7 @@ class ItemState extends ChangeNotifier {
         _playedMap[key] = false;
       }
     });
-    safePrint("$index番目の音声再生中");
+    safePrint('$index番目の音声再生中');
     notifyListeners();
   }
 }
@@ -118,13 +125,14 @@ class Content extends StatelessWidget {
   final String time;
   final String count;
   final String date;
-  const Content(
-      {super.key,
-      required this.title,
-      required this.name,
-      required this.time,
-      required this.count,
-      required this.date});
+  const Content({
+    super.key,
+    required this.title,
+    required this.name,
+    required this.time,
+    required this.count,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -143,11 +151,12 @@ class Content extends StatelessWidget {
               children: [
                 Flexible(flex: 3, child: Contributor(name: name)),
                 Flexible(
-                    flex: 2,
-                    child: SizedBox(
-                      width: 65,
-                      child: PlayTime(time: time),
-                    ))
+                  flex: 2,
+                  child: SizedBox(
+                    width: 65,
+                    child: PlayTime(time: time),
+                  ),
+                ),
               ],
             ),
           ),
@@ -185,7 +194,7 @@ class Contributor extends StatelessWidget {
             style: const TextStyle(fontSize: 15),
             overflow: TextOverflow.ellipsis,
           ),
-        )
+        ),
       ],
     );
   }
@@ -242,7 +251,7 @@ class TotalPlay extends StatelessWidget {
         Expanded(
           child:
               Text(count, softWrap: true, style: const TextStyle(fontSize: 15)),
-        )
+        ),
       ],
     );
   }

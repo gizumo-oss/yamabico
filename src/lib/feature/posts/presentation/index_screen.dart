@@ -12,17 +12,19 @@ class IndexScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<AudioData> audioPost = [
       AudioData(
-          '音声タイトル音声タイトル音音声タイトル',
-          User('テストテストテストユーザ名', 'https://loremflickr.com/320/240'),
-          '56',
-          '15:29',
-          '06/16'),
+        '音声タイトル音声タイトル音音声タイトル',
+        User('テストテストテストユーザ名', 'https://loremflickr.com/320/240'),
+        '56',
+        '15:29',
+        '06/16',
+      ),
       AudioData(
-          '音声タイトル音声タイトル音音声タイトル',
-          User('Contributor', 'https://loremflickr.com/320/240'),
-          '56',
-          '15:29',
-          '06/16'),
+        '音声タイトル音声タイトル音音声タイトル',
+        User('Contributor', 'https://loremflickr.com/320/240'),
+        '56',
+        '15:29',
+        '06/16',
+      ),
     ];
 
     return ChangeNotifierProvider<ItemState>(
@@ -32,21 +34,22 @@ class IndexScreen extends StatelessWidget {
         body: Stack(
           children: [
             Scrollbar(
-                child: ListView.separated(
-              itemCount: audioPost.length + 1,
-              separatorBuilder: (context, index) {
-                return const Divider();
-              },
-              itemBuilder: (context, index) {
-                if (index < audioPost.length) {
-                  return AudioPost(
-                    index: index,
-                    audioData: audioPost[index],
-                  );
-                }
-                return const SizedBox(height: 100.0);
-              },
-            )),
+              child: ListView.separated(
+                itemCount: audioPost.length + 1,
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+                itemBuilder: (context, index) {
+                  if (index < audioPost.length) {
+                    return AudioPost(
+                      index: index,
+                      audioData: audioPost[index],
+                    );
+                  }
+                  return const SizedBox(height: 100.0);
+                },
+              ),
+            ),
             Container(
               alignment: Alignment.bottomCenter,
               child: const MyMusicPlayer(),

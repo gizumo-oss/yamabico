@@ -46,13 +46,18 @@ class MyMusicPlayer extends StatelessWidget {
                   },
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0)
+                      const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 3.0,
+                      ),
                     ),
                     minimumSize: MaterialStateProperty.all(Size.zero),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0))
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
                     ),
                   ),
                   child: const Text(
@@ -69,17 +74,15 @@ class MyMusicPlayer extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 12.0,
-              )
+              ),
             ),
           ),
           const _MySeekBar(),
         ],
       ),
     );
-
   }
 }
-
 
 class _MySeekBar extends StatefulWidget {
   const _MySeekBar();
