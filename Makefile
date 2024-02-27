@@ -6,7 +6,7 @@
 help: ## makeコマンドのサブコマンドリストと、各コマンドの説明を表示します
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY := setup
+.PHONY: setup
 setup: ## 環境の構築を行います
 ifeq ($(shell uname), Darwin)
 ifeq ($(shell uname -m), arm64)
@@ -38,7 +38,7 @@ endif
 	@echo ''
 	@make dev-ios
 
-.PHONY := devices
+.PHONY: devices
 devices: ## 起動可能なデバイスを表示します
 	@echo ''
 	@echo '---------- 起動可能なデバイス ----------'
@@ -46,7 +46,7 @@ devices: ## 起動可能なデバイスを表示します
 	@echo ※iOS,Androidが表示されない場合は事前にシミュレーターを起動する必要があります
 	@echo '----------------------------------------'
 
-.PHONY := clean
+.PHONY: clean
 clean: ## パッケージの削除を行います
 	@fvm flutter clean
 
@@ -55,7 +55,7 @@ dev-ios: ## iOSシミュレーターでプロジェクトを起動します
 	@open -a Simulator
 	@cd src && fvm flutter run -d iPhone
 
-.PHONY := dev-android
+.PHONY: dev-android
 dev-android: ## WIP:Androidエミュレーターでプロジェクトを起動します
 	@echo 'WIP'
 
