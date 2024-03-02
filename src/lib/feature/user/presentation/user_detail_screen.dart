@@ -10,10 +10,10 @@ class UserDetailScreen extends StatelessWidget {
   final List<AudioData> userPosts;
 
   const UserDetailScreen({
-    Key? key,
+    super.key,
     required this.user,
     required this.userPosts,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,28 +36,26 @@ class UserDetailScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Scrollbar(
-                          child: ListView.separated(
-                            itemCount: userPosts.length + 1,
-                            separatorBuilder: (context, index) {
-                              return const Divider();
-                            },
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              if (index < userPosts.length) {
-                                return AudioPost(
-                                  index: index,
-                                  isVisibleAvatar: false,
-                                  audioData: userPosts[index],
-                                );
-                              }
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Scrollbar(
+                        child: ListView.separated(
+                          itemCount: userPosts.length + 1,
+                          separatorBuilder: (context, index) {
+                            return const Divider();
+                          },
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            if (index < userPosts.length) {
+                              return AudioPost(
+                                index: index,
+                                isVisibleAvatar: false,
+                                audioData: userPosts[index],
+                              );
+                            }
 
-                              return const SizedBox(height: 100.0);
-                            },
-                          ),
+                            return const SizedBox(height: 100.0);
+                          },
                         ),
                       ),
                     ),

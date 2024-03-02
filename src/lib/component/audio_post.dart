@@ -49,10 +49,7 @@ class AudioPost extends StatelessWidget {
                     ),
                   ),
                 )
-              : const SizedBox(
-                  width: 0,
-                  height: 0,
-                ),
+              : const SizedBox(),
           Content(
             title: audioData.title,
             name: audioData.user.name,
