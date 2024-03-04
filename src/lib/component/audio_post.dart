@@ -2,36 +2,72 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yamabico/feature/posts/presentation/index_screen.dart';
+import 'package:yamabico/feature/user/presentation/user_detail_screen.dart';
 
 class AudioPost extends StatelessWidget {
   final int index;
+  final bool isVisibleAvatar;
   final AudioData audioData;
 
-  const AudioPost({super.key, required this.index, required this.audioData});
+  const AudioPost({
+    super.key,
+    required this.index,
+    this.isVisibleAvatar = true,
+    required this.audioData,
+  });
+
+  // TODO: userDetailへの遷移はルーティングを通して遷移させる
+  void _navigateToUserDetail(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserDetailScreen(
+          user: audioData.user,
+          userPosts: [audioData],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final itemState = Provider.of<ItemState>(context);
+
     return Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Avatar(url: audioData.user.avatarUrl),
-            Content(
-                title: audioData.title,
-                name: audioData.user.name,
-                time: audioData.playTime,
-                count: audioData.count,
-                date: audioData.date),
-            IconButton(
-                icon: itemState.isPlaying(index)
-                    ? const Icon(Icons.pause_circle_filled)
-                    : const Icon(Icons.play_circle_filled),
-                color: const Color.fromRGBO(124, 122, 122, 1.0),
-                iconSize: 40,
-                onPressed: () => itemState.onPressedPlayButton(index))
-          ],
-        ));
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          isVisibleAvatar
+              ? GestureDetector(
+                  onTap: () => _navigateToUserDetail(context),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 13.0),
+                    child: Avatar(
+                      url: audioData.user.avatarUrl,
+                      width: 70,
+                      height: 60,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
+          Content(
+            title: audioData.title,
+            name: audioData.user.name,
+            time: audioData.playTime,
+            count: audioData.count,
+            date: audioData.date,
+          ),
+          IconButton(
+            icon: itemState.isPlaying(index)
+                ? const Icon(Icons.pause_circle_filled)
+                : const Icon(Icons.play_circle_filled),
+            color: const Color.fromRGBO(124, 122, 122, 1.0),
+            iconSize: 40,
+            onPressed: () => itemState.onPressedPlayButton(index),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -49,7 +85,7 @@ class ItemState extends ChangeNotifier {
         _playedMap[key] = false;
       }
     });
-    safePrint("$index番目の音声再生中");
+    safePrint('$index番目の音声再生中');
     notifyListeners();
   }
 }
@@ -57,21 +93,23 @@ class ItemState extends ChangeNotifier {
 // 投稿者アバター
 class Avatar extends StatelessWidget {
   final String? url;
+  final double width;
+  final double height;
+
   const Avatar({
     super.key,
     this.url,
+    required this.width,
+    required this.height,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 13.0),
-      child: SizedBox(
-        width: 70,
-        height: 60,
-        child: CircleAvatar(
-          backgroundImage: NetworkImage(url!),
-        ),
+    return SizedBox(
+      width: width,
+      height: height,
+      child: CircleAvatar(
+        backgroundImage: NetworkImage(url!),
       ),
     );
   }
@@ -84,13 +122,14 @@ class Content extends StatelessWidget {
   final String time;
   final String count;
   final String date;
-  const Content(
-      {super.key,
-      required this.title,
-      required this.name,
-      required this.time,
-      required this.count,
-      required this.date});
+  const Content({
+    super.key,
+    required this.title,
+    required this.name,
+    required this.time,
+    required this.count,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +138,7 @@ class Content extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 5.0),
+            alignment: Alignment.centerLeft,
             child: Text(title),
           ),
           Container(
@@ -108,11 +148,12 @@ class Content extends StatelessWidget {
               children: [
                 Flexible(flex: 3, child: Contributor(name: name)),
                 Flexible(
-                    flex: 2,
-                    child: SizedBox(
-                      width: 65,
-                      child: PlayTime(time: time),
-                    ))
+                  flex: 2,
+                  child: SizedBox(
+                    width: 65,
+                    child: PlayTime(time: time),
+                  ),
+                ),
               ],
             ),
           ),
@@ -150,7 +191,7 @@ class Contributor extends StatelessWidget {
             style: const TextStyle(fontSize: 15),
             overflow: TextOverflow.ellipsis,
           ),
-        )
+        ),
       ],
     );
   }
@@ -207,7 +248,7 @@ class TotalPlay extends StatelessWidget {
         Expanded(
           child:
               Text(count, softWrap: true, style: const TextStyle(fontSize: 15)),
-        )
+        ),
       ],
     );
   }

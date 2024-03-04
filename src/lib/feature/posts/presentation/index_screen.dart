@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:yamabico/component/audio_post.dart';
 import 'package:yamabico/component/my_app_bar.dart';
 import 'package:yamabico/component/my_music_player.dart';
+import 'package:yamabico/feature/user/presentation/user_detail_screen.dart';
 
 class IndexScreen extends StatelessWidget {
   const IndexScreen({super.key});
@@ -11,18 +12,21 @@ class IndexScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<AudioData> audioPost = [
       AudioData(
-          '音声タイトル音声タイトル音音声タイトル',
-          User('Contributor', 'https://loremflickr.com/320/240'),
-          '56',
-          '15:29',
-          '06/16'),
+        '音声タイトル音声タイトル音音声タイトル',
+        User('テストテストテストユーザ名', 'https://loremflickr.com/320/240'),
+        '56',
+        '15:29',
+        '06/16',
+      ),
       AudioData(
-          '音声タイトル音声タイトル音音声タイトル',
-          User('Contributor', 'https://loremflickr.com/320/240'),
-          '56',
-          '15:29',
-          '06/16'),
+        '音声タイトル音声タイトル音音声タイトル',
+        User('Contributor', 'https://loremflickr.com/320/240'),
+        '56',
+        '15:29',
+        '06/16',
+      ),
     ];
+
     return ChangeNotifierProvider<ItemState>(
       create: (_) => ItemState(),
       child: Scaffold(
@@ -30,21 +34,22 @@ class IndexScreen extends StatelessWidget {
         body: Stack(
           children: [
             Scrollbar(
-                child: ListView.separated(
-              itemCount: audioPost.length + 1,
-              separatorBuilder: (context, index) {
-                return const Divider();
-              },
-              itemBuilder: (context, index) {
-                if (index < audioPost.length) {
-                  return AudioPost(
-                    index: index,
-                    audioData: audioPost[index],
-                  );
-                }
-                return const SizedBox(height: 100.0);
-              },
-            )),
+              child: ListView.separated(
+                itemCount: audioPost.length + 1,
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+                itemBuilder: (context, index) {
+                  if (index < audioPost.length) {
+                    return AudioPost(
+                      index: index,
+                      audioData: audioPost[index],
+                    );
+                  }
+                  return const SizedBox(height: 100.0);
+                },
+              ),
+            ),
             Container(
               alignment: Alignment.bottomCenter,
               child: const MyMusicPlayer(),
@@ -76,14 +81,4 @@ class AudioData {
   String get count => _count;
   String get playTime => _playTime;
   String get date => _date;
-}
-
-class User {
-  final String _name;
-  final String _avatarUrl;
-
-  User(this._name, this._avatarUrl);
-
-  String get name => _name;
-  String get avatarUrl => _avatarUrl;
 }

@@ -43,9 +43,9 @@ class CustomButtonResolver extends ButtonResolver {
   String backTo(BuildContext context, AuthenticatorStep previousStep) {
     switch (previousStep) {
       case AuthenticatorStep.signIn:
-        return "ログイン画面へ戻る";
+        return 'ログイン画面へ戻る';
       default:
-        return "戻る";
+        return '戻る';
     }
   }
 }

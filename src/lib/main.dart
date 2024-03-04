@@ -1,7 +1,7 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:yamabico/route_type.dart';
 
 import 'feature/auth/infra/amplifyconfiguration.dart';
@@ -27,9 +27,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _configureAmplify().then((value) => {
-      _isAuthenticated().then((result) => _isAuth = result)
-    });
+    _configureAmplify().then(
+      (value) => {
+        _isAuthenticated().then((result) => _isAuth = result),
+      },
+    );
   }
 
   Future<void> _configureAmplify() async {
@@ -50,7 +52,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: _isAuth ? RouteType.posts().value() : RouteType.guestTop().value(),
+      initialRoute:
+          _isAuth ? RouteType.posts().value() : RouteType.guestTop().value(),
       routes: RouteType.routeScreenMaps(),
     );
   }

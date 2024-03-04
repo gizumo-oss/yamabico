@@ -11,6 +11,7 @@ class RouteType {
     'guestTop': '/',
     'login': '/login',
     'posts': '/posts',
+    'userDetail': '/user_detail',
   };
 
   final String? _value;
@@ -26,9 +27,10 @@ class RouteType {
     }
   }
 
-  RouteType.guestTop(): this(_paths['guestTop']);
-  RouteType.login(): this(_paths['login']);
-  RouteType.posts(): this(_paths['posts']);
+  RouteType.guestTop() : this(_paths['guestTop']);
+  RouteType.login() : this(_paths['login']);
+  RouteType.posts() : this(_paths['posts']);
+  RouteType.userDetail() : this(_paths['userDetail']);
 
   String value() {
     return _value!;
@@ -39,6 +41,8 @@ class RouteType {
       _paths['guestTop']!: (context) => const GuestTopScreen(),
       _paths['login']!: (context) => const LoginScreen(),
       _paths['posts']!: (context) => const IndexScreen(),
+      // TODO: userDetailへの遷移を実装する
+      // _paths['userDetail']!: (context) => const UserDetailScreen(),
     };
   }
 }
