@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
 import { useState } from 'react';
 import { Button } from 'react-native';
@@ -11,7 +11,7 @@ import TrackList from './TrackList';
 
 const Stack = createNativeStackNavigator();
 
-function PlayerScreen({ route }: any) {
+function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
   const track = route.params?.track;
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -75,6 +75,28 @@ function PlayerScreen({ route }: any) {
 
   return (
     <View style={styles.container}>
+      {/* ポジション（戻るヘッダー）を最上部に配置 */}
+      <View style={{
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 16,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#E5E2E9',
+        paddingTop: 48,
+        paddingBottom: 8,
+        zIndex: 10,
+      }}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 8 }}>
+          <MaterialIcons name="arrow-back" size={32} color="#CB759E" />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#191217', marginLeft: 8 }}>プレイヤー</Text>
+      </View>
+      {/* 下に余白を追加してヘッダーと重ならないようにする */}
+      <View style={{ height: 72 }} />
       <View style={styles.artworkWrapper}>
         <Image source={track.artwork} style={styles.artwork} />
       </View>
