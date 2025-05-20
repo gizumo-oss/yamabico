@@ -18,6 +18,7 @@ export type Track = {
   artist: string;
   artwork: any;
   file: any;
+  duration?: string; // 追加: 曲の長さ
 };
 
 const tracks: Track[] = [
@@ -27,6 +28,7 @@ const tracks: Track[] = [
     artist: 'Sample Artist',
     artwork: require('./assets/icon.png'),
     file: require('./assets/sample.mp3'),
+    duration: '2:34', // 追加: 固定の時間
   },
   // 追加のトラックはここに
 ];
@@ -76,15 +78,20 @@ export default function TrackList() {
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.artist}>{item.artist}</Text>
             </View>
-            {playingId === item.id ? (
-              <TouchableOpacity onPress={handlePause} style={{ marginLeft: 8 }}>
-                <MaterialIcons name="pause-circle-filled" size={40} color="#CB759E" />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => handlePlay(item)} style={{ marginLeft: 8 }}>
-                <MaterialIcons name="play-circle-filled" size={40} color="#CB759E" />
-              </TouchableOpacity>
-            )}
+            {/* 再生/一時停止ボタンの左隣に時間アイコンとテキスト */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
+              <MaterialIcons name="schedule" size={24} color="#A09DA1" style={{ marginRight: 2 }} />
+              <Text style={styles.duration}>{item.duration || '0:00'}</Text>
+              {playingId === item.id ? (
+                <TouchableOpacity onPress={handlePause} style={{ marginLeft: 8 }}>
+                  <MaterialIcons name="pause-circle-filled" size={40} color="#CB759E" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => handlePlay(item)} style={{ marginLeft: 8 }}>
+                  <MaterialIcons name="play-circle-filled" size={40} color="#CB759E" />
+                </TouchableOpacity>
+              )}
+            </View>
           </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 32 }}
@@ -119,6 +126,13 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
+  },
+  duration: {
+    fontSize: 15,
+    color: '#A09DA1',
+    marginRight: 12,
+    minWidth: 44,
+    textAlign: 'center',
   },
   artwork: {
     width: 64,
