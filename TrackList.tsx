@@ -1,8 +1,24 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 
-const tracks = [
+// 型定義
+export type RootStackParamList = {
+  TrackList: undefined;
+  Player: { track: Track };
+};
+
+export type Track = {
+  id: string;
+  title: string;
+  artist: string;
+  artwork: any;
+  file: any;
+};
+
+const tracks: Track[] = [
   {
     id: '1',
     title: 'Sample Track',
@@ -14,9 +30,9 @@ const tracks = [
 ];
 
 export default function TrackList() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'TrackList'>>();
 
-  const handlePress = (track: any) => {
+  const handlePress = (track: Track) => {
     navigation.navigate('Player', { track });
   };
 
