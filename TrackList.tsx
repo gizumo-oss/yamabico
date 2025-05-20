@@ -100,7 +100,7 @@ export default function TrackList() {
 
   return (
     <View style={{ flex: 1 }}>
-      <AppHeader onMenuPress={openDrawer} />
+      <AppHeader onMenuPress={openDrawer} title="音声リスト" />
       <Modal
         visible={drawerVisible}
         animationType="slide"

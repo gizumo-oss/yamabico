@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList, Track } from './TrackList';
+import AppHeader from './components/AppHeader';
 
 const tracks: Track[] = [
   {
@@ -21,9 +22,41 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Bookmarks'>;
 export default function BookmarksScreen({ route, navigation }: Props) {
   const { bookmarks } = route.params;
   const bookmarkedTracks = tracks.filter(t => bookmarks.includes(t.id));
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
+  const openDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
+  const renderDrawer = () => (
+    <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 48, paddingHorizontal: 16 }}>
+      <TouchableOpacity
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 20 }}
+        onPress={() => {
+          navigation.navigate('Bookmarks', { bookmarks });
+          closeDrawer();
+        }}
+      >
+        <MaterialIcons name="bookmark" size={28} color="#CB759E" style={{ marginRight: 12 }} />
+        <Text style={{ fontSize: 18, color: '#191217' }}>お気に入り</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={closeDrawer} style={{ position: 'absolute', top: 16, right: 16 }}>
+        <MaterialIcons name="close" size={28} color="#A09DA1" />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
+      <AppHeader onMenuPress={openDrawer} title="お気に入り" />
+      <Modal
+        visible={drawerVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeDrawer}
+      >
+        <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }} activeOpacity={1} onPress={closeDrawer} />
+        <View style={{ position: 'absolute', top: 0, right: 0, width: 240, height: '100%', backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8, elevation: 8 }}>
+          {renderDrawer()}
+        </View>
+      </Modal>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 8 }}>
           <MaterialIcons name="arrow-back" size={32} color="#CB759E" />

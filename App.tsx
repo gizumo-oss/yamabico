@@ -23,7 +23,6 @@ function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
 
   const openDrawer = () => setDrawerVisible(true);
   const closeDrawer = () => setDrawerVisible(false);
-
   const renderDrawer = () => (
     <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 48, paddingHorizontal: 16 }}>
       <TouchableOpacity
@@ -99,7 +98,7 @@ function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
 
   return (
     <View style={styles.container}>
-      <AppHeader onMenuPress={openDrawer} />
+      <AppHeader onMenuPress={openDrawer} title="プレイヤー" />
       <Modal
         visible={drawerVisible}
         animationType="slide"
