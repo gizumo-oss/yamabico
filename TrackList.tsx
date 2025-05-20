@@ -10,6 +10,7 @@ import { Audio } from 'expo-av';
 export type RootStackParamList = {
   TrackList: undefined;
   Player: { track: Track };
+  Bookmarks: { bookmarks: string[] };
 };
 
 export type Track = {
@@ -36,6 +37,7 @@ const tracks: Track[] = [
 export default function TrackList() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'TrackList'>>();
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
   const soundRef = useRef<Audio.Sound | null>(null);
 
   const handlePress = (track: Track) => {
@@ -65,9 +67,26 @@ export default function TrackList() {
     }
   };
 
+  const handleBookmark = (trackId: string) => {
+    setBookmarks((prev) =>
+      prev.includes(trackId)
+        ? prev.filter((id) => id !== trackId)
+        : [...prev, trackId]
+    );
+  };
+
+  const goToBookmarks = () => {
+    navigation.navigate('Bookmarks', { bookmarks });
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>音声リスト</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={styles.header}>音声リスト</Text>
+        <TouchableOpacity onPress={goToBookmarks} style={{ padding: 8 }}>
+          <MaterialIcons name="bookmark" size={32} color="#CB759E" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={tracks}
         keyExtractor={item => item.id}
@@ -78,7 +97,6 @@ export default function TrackList() {
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.artist}>{item.artist}</Text>
             </View>
-            {/* 再生/一時停止ボタンの左隣に時間アイコンとテキスト */}
             <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
               <MaterialIcons name="schedule" size={24} color="#A09DA1" style={{ marginRight: 2 }} />
               <Text style={styles.duration}>{item.duration || '0:00'}</Text>
@@ -91,6 +109,9 @@ export default function TrackList() {
                   <MaterialIcons name="play-circle-filled" size={40} color="#CB759E" />
                 </TouchableOpacity>
               )}
+              <TouchableOpacity onPress={() => handleBookmark(item.id)} style={{ marginLeft: 8 }}>
+                <MaterialIcons name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-border'} size={32} color={bookmarks.includes(item.id) ? '#CB759E' : '#A09DA1'} />
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         )}
