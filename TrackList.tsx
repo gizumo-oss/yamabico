@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
@@ -38,6 +38,7 @@ export default function TrackList() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'TrackList'>>();
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const soundRef = useRef<Audio.Sound | null>(null);
 
   const handlePress = (track: Track) => {
@@ -75,18 +76,50 @@ export default function TrackList() {
     );
   };
 
-  const goToBookmarks = () => {
-    navigation.navigate('Bookmarks', { bookmarks });
-  };
+  const openDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
+
+  const renderDrawer = () => (
+    <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 48, paddingHorizontal: 16 }}>
+      <TouchableOpacity
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 20 }}
+        onPress={() => {
+          navigation.navigate('Bookmarks', { bookmarks });
+          closeDrawer();
+        }}
+      >
+        <MaterialIcons name="bookmark" size={28} color="#CB759E" style={{ marginRight: 12 }} />
+        <Text style={{ fontSize: 18, color: '#191217' }}>お気に入り</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={closeDrawer} style={{ position: 'absolute', top: 16, right: 16 }}>
+        <MaterialIcons name="close" size={28} color="#A09DA1" />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={styles.header}>音声リスト</Text>
-        <TouchableOpacity onPress={goToBookmarks} style={{ padding: 8 }}>
-          <MaterialIcons name="bookmark" size={32} color="#CB759E" />
+    <View style={{ flex: 1 }}>
+      {/* App Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 48, paddingBottom: 16, paddingHorizontal: 24, backgroundColor: '#E5E2E9' }}>
+        <Image source={require('./assets/icon.png')} style={{ width: 36, height: 36, borderRadius: 8, marginRight: 12 }} />
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#191217', flex: 1 }}>音声リスト</Text>
+        <TouchableOpacity onPress={openDrawer} style={{ padding: 8 }}>
+          <MaterialIcons name="menu" size={32} color="#CB759E" />
         </TouchableOpacity>
       </View>
+      {/* Drawer Modal (Web/Mobile両対応) */}
+      <Modal
+        visible={drawerVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeDrawer}
+      >
+        <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }} activeOpacity={1} onPress={closeDrawer} />
+        <View style={{ position: 'absolute', top: 0, right: 0, width: 240, height: '100%', backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8, elevation: 8 }}>
+          {renderDrawer()}
+        </View>
+      </Modal>
+      {/* トラックリスト */}
       <FlatList
         data={tracks}
         keyExtractor={item => item.id}
