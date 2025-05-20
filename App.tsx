@@ -97,8 +97,14 @@ function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, width: '100%', backgroundColor: '#E5E2E9' }}>
       <AppHeader onMenuPress={openDrawer} title="プレイヤー" />
+      {/* 戻るボタンをAppHeaderの下に配置 */}
+      <View style={{ width: '100%', alignItems: 'flex-start', paddingHorizontal: 24, marginTop: 8 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 8 }}>
+          <MaterialIcons name="arrow-back" size={32} color="#CB759E" />
+        </TouchableOpacity>
+      </View>
       <Modal
         visible={drawerVisible}
         animationType="slide"
@@ -110,34 +116,35 @@ function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
           {renderDrawer()}
         </View>
       </Modal>
-      {/* 下に余白を追加してヘッダーと重ならないようにする */}
-      <View style={{ height: 72 }} />
-      <View style={styles.artworkWrapper}>
-        <Image source={track.artwork} style={styles.artwork} />
-      </View>
-      <Text style={styles.title}>{track.title}</Text>
-      <Text style={styles.artist}>{track.artist}</Text>
-      <Slider
-        style={styles.slider}
-        minimumValue={0}
-        maximumValue={duration}
-        value={position}
-        minimumTrackTintColor="#CB759E"
-        maximumTrackTintColor="#E5E2E9"
-        thumbTintColor="#CB759E"
-        onSlidingComplete={seek}
-      />
-      <View style={styles.timeWrapper}>
-        <Text style={styles.time}>{millisToMinSec(position)}</Text>
-        <Text style={styles.time}>{millisToMinSec(duration)}</Text>
-      </View>
-      <View style={styles.controls}>
-        <MaterialIcons name="stop" size={48} color="#A09DA1" onPress={stopSound} />
-        {isPlaying ? (
-          <MaterialIcons name="pause-circle-filled" size={64} color="#CB759E" onPress={pauseSound} />
-        ) : (
-          <MaterialIcons name="play-circle-filled" size={64} color="#CB759E" onPress={playSound} />
-        )}
+      {/* プレイヤーUIを中央寄せ・余白調整 */}
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        <View style={styles.artworkWrapper}>
+          <Image source={track.artwork} style={styles.artwork} />
+        </View>
+        <Text style={styles.title}>{track.title}</Text>
+        <Text style={styles.artist}>{track.artist}</Text>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={duration}
+          value={position}
+          minimumTrackTintColor="#CB759E"
+          maximumTrackTintColor="#E5E2E9"
+          thumbTintColor="#CB759E"
+          onSlidingComplete={seek}
+        />
+        <View style={styles.timeWrapper}>
+          <Text style={styles.time}>{millisToMinSec(position)}</Text>
+          <Text style={styles.time}>{millisToMinSec(duration)}</Text>
+        </View>
+        <View style={styles.controls}>
+          <MaterialIcons name="stop" size={48} color="#A09DA1" onPress={stopSound} />
+          {isPlaying ? (
+            <MaterialIcons name="pause-circle-filled" size={64} color="#CB759E" onPress={pauseSound} />
+          ) : (
+            <MaterialIcons name="play-circle-filled" size={64} color="#CB759E" onPress={playSound} />
+          )}
+        </View>
       </View>
       <StatusBar style="auto" />
     </View>
