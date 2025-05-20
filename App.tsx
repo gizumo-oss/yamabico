@@ -5,19 +5,18 @@ import { useState } from 'react';
 import { Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { MaterialIcons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import TrackList from './TrackList';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function PlayerScreen({ route }: any) {
+  const track = route.params?.track;
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(1);
-
-  // 曲情報（仮）
-  const track = {
-    title: 'Sample Track',
-    artist: 'Sample Artist',
-    artwork: require('./assets/icon.png'),
-  };
 
   async function playSound() {
     if (sound) {
@@ -105,6 +104,17 @@ export default function App() {
       </View>
       <StatusBar style="auto" />
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="TrackList" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="TrackList" component={TrackList} />
+        <Stack.Screen name="Player" component={PlayerScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
