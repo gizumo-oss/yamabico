@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
 
 // 型定義
 export type RootStackParamList = {
@@ -31,9 +33,34 @@ const tracks: Track[] = [
 
 export default function TrackList() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'TrackList'>>();
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
 
   const handlePress = (track: Track) => {
     navigation.navigate('Player', { track });
+  };
+
+  const handlePlay = async (track: Track) => {
+    if (soundRef.current) {
+      await soundRef.current.stopAsync();
+      await soundRef.current.unloadAsync();
+      soundRef.current = null;
+    }
+    const { sound } = await Audio.Sound.createAsync(track.file, {}, (status) => {
+      if (status.isLoaded && status.didJustFinish) {
+        setPlayingId(null);
+      }
+    });
+    soundRef.current = sound;
+    await sound.playAsync();
+    setPlayingId(track.id);
+  };
+
+  const handlePause = async () => {
+    if (soundRef.current) {
+      await soundRef.current.pauseAsync();
+      setPlayingId(null);
+    }
   };
 
   return (
@@ -43,12 +70,21 @@ export default function TrackList() {
         data={tracks}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} onPress={() => handlePress(item)}>
+          <TouchableOpacity style={styles.card} onPress={() => handlePress(item)} activeOpacity={0.8}>
             <Image source={item.artwork} style={styles.artwork} />
             <View style={styles.info}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.artist}>{item.artist}</Text>
             </View>
+            {playingId === item.id ? (
+              <TouchableOpacity onPress={handlePause} style={{ marginLeft: 8 }}>
+                <MaterialIcons name="pause-circle-filled" size={40} color="#CB759E" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => handlePlay(item)} style={{ marginLeft: 8 }}>
+                <MaterialIcons name="play-circle-filled" size={40} color="#CB759E" />
+              </TouchableOpacity>
+            )}
           </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 32 }}
