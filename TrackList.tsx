@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import AppHeader from './components/AppHeader';
 
 // 型定義
 export type RootStackParamList = {
@@ -99,15 +100,7 @@ export default function TrackList() {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* App Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 48, paddingBottom: 16, paddingHorizontal: 24, backgroundColor: '#E5E2E9' }}>
-        <Image source={require('./assets/icon.png')} style={{ width: 36, height: 36, borderRadius: 8, marginRight: 12 }} />
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#191217', flex: 1 }}>音声リスト</Text>
-        <TouchableOpacity onPress={openDrawer} style={{ padding: 8 }}>
-          <MaterialIcons name="menu" size={32} color="#CB759E" />
-        </TouchableOpacity>
-      </View>
-      {/* Drawer Modal (Web/Mobile両対応) */}
+      <AppHeader onMenuPress={openDrawer} />
       <Modal
         visible={drawerVisible}
         animationType="slide"
@@ -119,7 +112,6 @@ export default function TrackList() {
           {renderDrawer()}
         </View>
       </Modal>
-      {/* トラックリスト */}
       <FlatList
         data={tracks}
         keyExtractor={item => item.id}

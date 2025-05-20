@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal } from 'react-native';
 import { Audio } from 'expo-av';
 import { useState } from 'react';
 import { Button } from 'react-native';
@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TrackList from './TrackList';
 import BookmarksScreen from './BookmarksScreen';
+import AppHeader from './components/AppHeader';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,28 @@ function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(1);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const openDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
+
+  const renderDrawer = () => (
+    <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 48, paddingHorizontal: 16 }}>
+      <TouchableOpacity
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 20 }}
+        onPress={() => {
+          navigation.navigate('Bookmarks', { bookmarks: [] }); // プレイヤー画面では空配列でOK
+          closeDrawer();
+        }}
+      >
+        <MaterialIcons name="bookmark" size={28} color="#CB759E" style={{ marginRight: 12 }} />
+        <Text style={{ fontSize: 18, color: '#191217' }}>お気に入り</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={closeDrawer} style={{ position: 'absolute', top: 16, right: 16 }}>
+        <MaterialIcons name="close" size={28} color="#A09DA1" />
+      </TouchableOpacity>
+    </View>
+  );
 
   async function playSound() {
     if (sound) {
@@ -76,26 +99,18 @@ function PlayerScreen({ route, navigation }: { route: any; navigation: any }) {
 
   return (
     <View style={styles.container}>
-      {/* ポジション（戻るヘッダー）を最上部に配置 */}
-      <View style={{
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: '#E5E2E9',
-        paddingTop: 48,
-        paddingBottom: 8,
-        zIndex: 10,
-      }}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 8 }}>
-          <MaterialIcons name="arrow-back" size={32} color="#CB759E" />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#191217', marginLeft: 8 }}>プレイヤー</Text>
-      </View>
+      <AppHeader onMenuPress={openDrawer} />
+      <Modal
+        visible={drawerVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeDrawer}
+      >
+        <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }} activeOpacity={1} onPress={closeDrawer} />
+        <View style={{ position: 'absolute', top: 0, right: 0, width: 240, height: '100%', backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8, elevation: 8 }}>
+          {renderDrawer()}
+        </View>
+      </Modal>
       {/* 下に余白を追加してヘッダーと重ならないようにする */}
       <View style={{ height: 72 }} />
       <View style={styles.artworkWrapper}>
