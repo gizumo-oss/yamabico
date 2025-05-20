@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList, Track } from './TrackList';
+import { Audio } from 'expo-av';
 import AppHeader from './components/AppHeader';
+import { RootStackParamList, Track } from './TrackList';
 
 const tracks: Track[] = [
   {
@@ -21,10 +22,41 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Bookmarks'>;
 
 export default function BookmarksScreen({ route, navigation }: Props) {
   const { bookmarks } = route.params;
-  const bookmarkedTracks = tracks.filter(t => bookmarks.includes(t.id));
-  const [drawerVisible, setDrawerVisible] = React.useState(false);
+  const [bookmarkIds, setBookmarkIds] = useState<string[]>(bookmarks);
+  const bookmarkedTracks = tracks.filter(t => bookmarkIds.includes(t.id));
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const openDrawer = () => setDrawerVisible(true);
   const closeDrawer = () => setDrawerVisible(false);
+
+  const handlePlay = async (track: Track) => {
+    if (soundRef.current) {
+      await soundRef.current.stopAsync();
+      await soundRef.current.unloadAsync();
+      soundRef.current = null;
+    }
+    const { sound } = await Audio.Sound.createAsync(track.file, {}, (status) => {
+      if (status.isLoaded && status.didJustFinish) {
+        setPlayingId(null);
+      }
+    });
+    soundRef.current = sound;
+    await sound.playAsync();
+    setPlayingId(track.id);
+  };
+
+  const handlePause = async () => {
+    if (soundRef.current) {
+      await soundRef.current.pauseAsync();
+      setPlayingId(null);
+    }
+  };
+
+  const handleRemoveBookmark = (trackId: string) => {
+    setBookmarkIds(prev => prev.filter(id => id !== trackId));
+  };
+
   const renderDrawer = () => (
     <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 48, paddingHorizontal: 16 }}>
       <TouchableOpacity
@@ -57,12 +89,6 @@ export default function BookmarksScreen({ route, navigation }: Props) {
           {renderDrawer()}
         </View>
       </Modal>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 8 }}>
-          <MaterialIcons name="arrow-back" size={32} color="#CB759E" />
-        </TouchableOpacity>
-        <Text style={styles.header}>お気に入り</Text>
-      </View>
       {bookmarkedTracks.length === 0 ? (
         <Text style={{ color: '#A09DA1', fontSize: 18, alignSelf: 'center', marginTop: 32 }}>お気に入りはありません</Text>
       ) : (
@@ -70,7 +96,7 @@ export default function BookmarksScreen({ route, navigation }: Props) {
           data={bookmarkedTracks}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <View style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Player', { track: item })} activeOpacity={0.8}>
               <Image source={item.artwork} style={styles.artwork} />
               <View style={styles.info}>
                 <Text style={styles.title}>{item.title}</Text>
@@ -79,8 +105,20 @@ export default function BookmarksScreen({ route, navigation }: Props) {
               <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
                 <MaterialIcons name="schedule" size={24} color="#A09DA1" style={{ marginRight: 2 }} />
                 <Text style={styles.duration}>{item.duration || '0:00'}</Text>
+                {playingId === item.id ? (
+                  <TouchableOpacity onPress={handlePause} style={{ marginLeft: 8 }}>
+                    <MaterialIcons name="pause-circle-filled" size={40} color="#CB759E" />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => handlePlay(item)} style={{ marginLeft: 8 }}>
+                    <MaterialIcons name="play-circle-filled" size={40} color="#CB759E" />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity onPress={() => handleRemoveBookmark(item.id)} style={{ marginLeft: 8 }}>
+                  <MaterialIcons name="bookmark-remove" size={32} color="#A09DA1" />
+                </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
           contentContainerStyle={{ paddingBottom: 32 }}
         />
@@ -93,14 +131,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E5E2E9',
-    paddingTop: 48,
+    paddingTop: 0,
     paddingHorizontal: 24,
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#191217',
-    marginLeft: 8,
   },
   card: {
     flexDirection: 'row',
