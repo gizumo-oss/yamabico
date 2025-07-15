@@ -12,6 +12,7 @@ export type RootStackParamList = {
   TrackList: undefined;
   Player: { track: Track };
   Bookmarks: { bookmarks: string[] };
+  Upload: undefined;
 };
 
 export { Track } from '../data/tracks';
@@ -72,6 +73,16 @@ export default function TrackList() {
       >
         <MaterialIcons name="bookmark" size={28} color="#CB759E" style={{ marginRight: 12 }} />
         <Text style={{ fontSize: 18, color: '#191217' }}>お気に入り</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ flexDirection: 'row', alignItems: 'center', padding: 20 }}
+        onPress={() => {
+          navigation.navigate('Upload');
+          closeDrawer();
+        }}
+      >
+        <MaterialIcons name="cloud-upload" size={28} color="#CB759E" style={{ marginRight: 12 }} />
+        <Text style={{ fontSize: 18, color: '#191217' }}>音声アップロード</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={closeDrawer} style={{ position: 'absolute', top: 16, right: 16 }}>
         <MaterialIcons name="close" size={28} color="#A09DA1" />
