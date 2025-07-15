@@ -3,16 +3,16 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Modal } from
 import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Audio } from 'expo-av';
-import AppHeader from './components/AppHeader';
-import { RootStackParamList, Track } from './TrackList';
+import AppHeader from '@components/AppHeader';
+import { RootStackParamList, Track } from '@components/TrackList';
 
 const tracks: Track[] = [
   {
     id: '1',
     title: 'Sample Track',
     artist: 'Sample Artist',
-    artwork: require('./assets/icon.png'),
-    file: require('./assets/sample.mp3'),
+    artwork: require('../assets/icon.png'),
+    file: require('../assets/sample.mp3'),
     duration: '2:34',
   },
   // 追加のトラックはここに

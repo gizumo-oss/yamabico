@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
-import AppHeader from './components/AppHeader';
+import AppHeader from '@components/AppHeader';
 
 // 型定義
 export type RootStackParamList = {
@@ -28,8 +28,8 @@ const tracks: Track[] = [
     id: '1',
     title: 'Sample Track',
     artist: 'Sample Artist',
-    artwork: require('./assets/icon.png'),
-    file: require('./assets/sample.mp3'),
+    artwork: require('../assets/icon.png'),
+    file: require('../assets/sample.mp3'),
     duration: '2:34', // 追加: 固定の時間
   },
   // 追加のトラックはここに

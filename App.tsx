@@ -7,9 +7,9 @@ import Slider from '@react-native-community/slider';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TrackList from './TrackList';
-import BookmarksScreen from './BookmarksScreen';
-import AppHeader from './components/AppHeader';
+import TrackList from '@components/TrackList';
+import BookmarksScreen from '@components/BookmarksScreen';
+import AppHeader from '@components/AppHeader';
 
 const Stack = createNativeStackNavigator();
 
