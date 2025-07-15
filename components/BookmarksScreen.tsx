@@ -67,7 +67,7 @@ export default function BookmarksScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <AppHeader onMenuPress={openDrawer} title="お気に入り" />
+      <AppHeader onMenuPress={openDrawer} title="お気に入り" onBackPress={() => navigation.goBack()} />
       <Modal
         visible={drawerVisible}
         animationType="slide"
