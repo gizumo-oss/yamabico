@@ -5,18 +5,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Audio } from 'expo-av';
 import AppHeader from '@components/AppHeader';
 import { RootStackParamList, Track } from '@components/TrackList';
+import { tracks } from '../data/tracks';
 
-const tracks: Track[] = [
-  {
-    id: '1',
-    title: 'Sample Track',
-    artist: 'Sample Artist',
-    artwork: require('../assets/icon.png'),
-    file: require('../assets/sample.mp3'),
-    duration: '2:34',
-  },
-  // 追加のトラックはここに
-];
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Bookmarks'>;
 
