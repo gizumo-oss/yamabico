@@ -31,7 +31,6 @@ endif
 	@echo 'git setup finished'
 	@npm install -g expo-cli
 	@cd src && npm install
-	@make devices
 	@echo ''
 	@make dev-ios
 
