@@ -35,4 +35,3 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-assets/sample.mp3
