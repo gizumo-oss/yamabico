@@ -16,10 +16,9 @@ else
 	$(error [ERROR] 現在MacOS以外は対応していません。)
 endif
 
-	@result_fvm=$(shell fvm --version &> /dev/null && echo $$?); \
-	if [ "$$result_fvm" != 0 ]; then \
-		brew tap leoafarias/fvm; \
-		brew install fvm; \
+	@result_node=$(shell node --version &> /dev/null && echo $$?); \
+	if [ "$$result_node" != 0 ]; then \
+		brew install node; \
 	fi;
 
 	@result_cocoapods=$(shell pod --version &> /dev/null && echo $$?); \
@@ -30,51 +29,57 @@ endif
 
 	@make git-setup
 	@echo 'git setup finished'
-	@fvm use stable --force
-	@fvm flutter doctor
-	@fvm flutter doctor --android-licenses
-	@cd src && fvm flutter pub get
+	@npm install -g expo-cli
+	@cd src && npm install
 	@make devices
 	@echo ''
 	@make dev-ios
 
-.PHONY: devices
-devices: ## 起動可能なデバイスを表示します
-	@echo ''
-	@echo '---------- 起動可能なデバイス ----------'
-	@fvm flutter devices
-	@echo ※iOS,Androidが表示されない場合は事前にシミュレーターを起動する必要があります
-	@echo '----------------------------------------'
-
 .PHONY: clean
-clean: ## パッケージの削除を行います
-	@fvm flutter clean
+clean: ## パッケージとキャッシュの削除を行います
+	@cd src && rm -rf node_modules .expo
+	@cd src && npm cache clean --force
 
 .PHONY: dev-ios
 dev-ios: ## iOSシミュレーターでプロジェクトを起動します
-	@open -a Simulator
-	@cd src && fvm flutter run -d iPhone
+	@cd src && npm run ios
 
 .PHONY: dev-android
-dev-android: ## WIP:Androidエミュレーターでプロジェクトを起動します
-	@echo 'WIP'
+dev-android: ## Androidエミュレーターでプロジェクトを起動します
+	@cd src && npm run android
+
+.PHONY: dev-web
+dev-web: ## Webブラウザでプロジェクトを起動します
+	@cd src && npm run web
+
+.PHONY: start
+start: ## Expo開発サーバーを起動します（対話的にプラットフォームを選択可能）
+	@cd src && npm start
 
 .PHONY: git-setup
 git-setup: ## gitの設定を行います
 	$(shell ./.make/setup_git.sh)
 
-.PHONY: dev-analyze
-dev-analyze: ## プロジェクトの静的解析を行います
-	@cd src && fvm flutter analyze
+.PHONY: install
+install: ## npm依存関係をインストールします
+	@cd src && npm install
 
-.PHONY: dev-format
-dev-format: ## プロジェクトのフォーマットを行います
-	@cd src && dart format .
+.PHONY: update
+update: ## npm依存関係を更新します
+	@cd src && npm update
 
-.PHONY: dev-fix-dryrun
-dev-fix-dryrun: ## dev-analyzeによって特定された問題、非推奨のAPIや機能の使用に関連する問題の自動修正を提案します
-	@cd src && dart fix --dry-run
+.PHONY: lint
+lint: ## TypeScriptの型チェックを行います
+	@cd src && npx tsc --noEmit
 
-.PHONY: dev-fix
-dev-fix: ## dev-fix-dryrunの静的解析修正の提案を適応します
-	@cd src && dart fix --apply
+.PHONY: format
+format: ## Prettierでコードをフォーマットします（Prettierがインストールされている場合）
+	@cd src && npx prettier --write "**/*.{js,jsx,ts,tsx,json}"
+
+.PHONY: build-ios
+build-ios: ## iOS用のビルドを作成します
+	@cd src && expo build:ios
+
+.PHONY: build-android
+build-android: ## Android用のビルドを作成します
+	@cd src && expo build:android
