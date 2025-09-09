@@ -1,6 +1,6 @@
 {
-  "name": "vibe-yamabico",
-  "version": "1.0.0",
+  "name": "yamabico-client",
+  "version": "0.0.2",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
